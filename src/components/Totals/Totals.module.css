@@ -1,0 +1,28 @@
+.body {
+    background-color: rgb(52, 56, 71);
+    margin: 10px;
+    padding: 10px 30px 10px 30px;
+    border-radius: 15px;
+    box-shadow: rgb(50, 50, 116) 0px 10px 15px;
+    transition: 200ms;
+}
+
+.statContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.statBtn {
+    padding: 15px;
+    font-size: larger;
+    background-color: rgb(255, 31, 124);
+    border: none;
+    border-radius: 10px;
+    transition: 200ms;
+}
+
+.statBtn:hover {
+    background-color: rgb(185, 255, 73);
+}
