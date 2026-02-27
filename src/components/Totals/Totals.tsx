@@ -1,18 +1,33 @@
+import { useNavigate } from "react-router-dom";
 import style from "./Totals.module.css";
 
 type TotalsParams = {
     totalVal?: number,
     numEntries?: number,
-    transactionEntry?: boolean
+    transactionEntry?: boolean,
+    addBtnHandler?: () => void
 };
 
-export default function Totals({ totalVal = 0, numEntries = 0, transactionEntry = false }: TotalsParams) {
+export default function Totals({ totalVal = 0, numEntries = 0, transactionEntry = false, addBtnHandler = () => {} }: TotalsParams) {
+    const navigator = useNavigate();
+    
     return (
         <div className={style.body}>
-            <h1>Total: ₹{totalVal}</h1>
-            <p className={style.statContainer}>
+            <h1>{transactionEntry ? "Transactions" : "Ledgers"}</h1>
+            <h2>Total: &#8377;{totalVal}</h2>
+            <div className={style.statContainer}>
                 Total {numEntries} {transactionEntry ? "transaction" : "ledger"} entries.
-                <button className={style.statBtn}>Stats</button></p>
+                <div>
+                    <button className={`${style.addBtn} ${style.btn}`} onClick={addBtnHandler}>Add</button>
+                    <button className={`${style.statBtn} ${style.btn}`}>Stats</button>
+                    {
+                        transactionEntry ? 
+                            <button className={`${style.backBtn} ${style.btn}`} onClick={() => navigator(-1)}>Back</button>
+                            :
+                            <></>
+                    }
+                </div>
+            </div>
         </div>
     );
 }

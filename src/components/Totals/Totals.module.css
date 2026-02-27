@@ -14,15 +14,27 @@
     justify-content: space-between;
 }
 
-.statBtn {
+.btn {
+    margin: 5px;
     padding: 15px;
     font-size: larger;
-    background-color: rgb(255, 31, 124);
     border: none;
     border-radius: 10px;
     transition: 200ms;
 }
 
-.statBtn:hover {
+.statBtn {
+    background-color: rgb(121, 31, 255);
+}
+
+.addBtn {
+    background-color: rgb(31, 203, 255);
+}
+
+.backBtn {
+    background-color: rgb(255, 31, 124);
+}
+
+.btn:hover {
     background-color: rgb(185, 255, 73);
 }

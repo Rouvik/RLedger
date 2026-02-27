@@ -1,6 +1,12 @@
 body {
     margin: 0px;
     padding: 0px;
+
+    font-family: 'Martian Mono';
+}
+
+body * {
+    font-family: 'Martian Mono';
 }
 
 #root {

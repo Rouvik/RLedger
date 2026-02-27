@@ -1,0 +1,12 @@
+@font-face {
+    font-family: 'Martian Mono';
+    src: url('MartianMono-SemiExpandedRegular.eot');
+    src: url('MartianMono-SemiExpandedRegular.eot?#iefix') format('embedded-opentype'),
+        url('MartianMono-SemiExpandedRegular.woff2') format('woff2'),
+        url('MartianMono-SemiExpandedRegular.woff') format('woff'),
+        url('MartianMono-SemiExpandedRegular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+

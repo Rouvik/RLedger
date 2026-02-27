@@ -2,7 +2,7 @@
 A simple pocket ledger app made using node, ionic/capacitor and sqlite 
 
 # Todo:
-- Add UI to add new ledgers
+- <s>Add UI to add new ledgers</s>
 - Build client library to handle sqlite transactions
 - Complete the model
 

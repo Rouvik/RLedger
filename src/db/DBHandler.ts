@@ -7,7 +7,29 @@ let db: SQLiteDBConnection | null = null;
 let initliasing : Promise<any> | null = null;
 
 async function prepareDB(db: SQLiteDBConnection) {
-    await db.execute("CREATE TABLE IF NOT EXISTS LEDGERS (id INTEGER PRIMARY KEY, name VARCHAR(50));");
+    await db.executeSet([
+        {
+            statement:
+            `CREATE TABLE IF NOT EXISTS LEDGERS (
+                id INTEGER PRIMARY KEY NOT NULL,
+                name VARCHAR(50) NOT NULL,
+                img INTEGER
+            );`,
+            values: []
+        },
+        {
+            statement:
+            `CREATE TABLE IF NOT EXISTS TRANSACTIONS (
+                id INTEGER PRIMARY KEY NOT NULL,
+                ledger_id INTEGER NOT NULL,
+                name VARCHAR(20) NOT NULL,
+                details VARCHAR(256),
+                amount DECIMAL(13, 4) NOT NULL,
+                FOREIGN KEY (ledger_id) REFERENCES LEDGERS(id)
+            );`,
+            values: []
+        }
+    ]);
 }
 
 async function initDatabase() {    
@@ -29,9 +51,9 @@ async function initDatabase() {
     return db;
 }
 
-export async function getDB() {    
+export async function getDB() {
     if (db) {
-        return db;
+        return db as SQLiteDBConnection;
     }
 
     if (!initliasing) {
@@ -39,7 +61,7 @@ export async function getDB() {
     }
     
     db = await initliasing;
-    return db;
+    return db as SQLiteDBConnection;
 }
 
 export async function closeDB() {
