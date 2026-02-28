@@ -3,7 +3,11 @@ A simple pocket ledger app made using node, ionic/capacitor and sqlite
 
 # Todo:
 - <s>Add UI to add new ledgers</s>
-- Build client library to handle sqlite transactions
+- <s>Build client library to handle sqlite transactions</s>
+- <s>Build transactions and ledgers basic viewing and adding</s>
+- Add support to edit transactions
+- Statistics maybe?
+- Advanced filtering and sorting for transactions maybe?
 - Complete the model
 
 # Notes to self:

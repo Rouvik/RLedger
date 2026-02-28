@@ -1,0 +1,52 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    
+    margin: 15px;
+    padding: 15px;
+}
+
+.container h1 {
+    text-align: center;
+}
+
+.container>* {
+    margin: 5px;
+}
+
+
+.container label {
+    font-size: large;
+    font-weight: bold;
+}
+
+.container label>input, .container label>textarea {
+    padding: 5px;
+    border: 0px;
+    border-radius: 2px;
+    outline: none;
+
+    font-size: large;
+    background-color: rgb(54, 54, 54);
+    color: white;
+}
+
+.container button {
+    width: 5em;
+    height: 3em;
+    border: 0px;
+    border-radius: 5px;
+    margin: 5px;
+
+    font-size: larger;
+    background-color: rgb(34, 255, 144);
+    transition: 200ms;
+}
+
+.container button:hover {
+    background-color: rgb(174, 255, 44);
+}
+
+.required {
+    color: rgb(255, 64, 0);
+}

@@ -5,12 +5,13 @@ type TotalsParams = {
     totalVal?: number,
     numEntries?: number,
     transactionEntry?: boolean,
-    addBtnHandler?: () => void
+    addBtnHandler?: () => void,
+    delBtnHandler?: () => void
 };
 
-export default function Totals({ totalVal = 0, numEntries = 0, transactionEntry = false, addBtnHandler = () => {} }: TotalsParams) {
+export default function Totals({ totalVal = 0, numEntries = 0, transactionEntry = false, addBtnHandler = () => { }, delBtnHandler = () => { } }: TotalsParams) {
     const navigator = useNavigate();
-    
+
     return (
         <div className={style.body}>
             <h1>{transactionEntry ? "Transactions" : "Ledgers"}</h1>
@@ -21,7 +22,13 @@ export default function Totals({ totalVal = 0, numEntries = 0, transactionEntry 
                     <button className={`${style.addBtn} ${style.btn}`} onClick={addBtnHandler}>Add</button>
                     <button className={`${style.statBtn} ${style.btn}`}>Stats</button>
                     {
-                        transactionEntry ? 
+                        transactionEntry ?
+                            <button className={`${style.deleteBtn} ${style.btn}`} onClick={delBtnHandler}>Delete</button>
+                            :
+                            <></>
+                    }
+                    {
+                        transactionEntry ?
                             <button className={`${style.backBtn} ${style.btn}`} onClick={() => navigator(-1)}>Back</button>
                             :
                             <></>

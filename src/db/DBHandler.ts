@@ -25,8 +25,18 @@ async function prepareDB(db: SQLiteDBConnection) {
                 name VARCHAR(20) NOT NULL,
                 details VARCHAR(256),
                 amount DECIMAL(13, 4) NOT NULL,
-                FOREIGN KEY (ledger_id) REFERENCES LEDGERS(id)
+                create_time INTEGER NOT NULL DEFAULT (strftime('%s', 'now') * 1000),
+                transaction_time INTEGER,
+                FOREIGN KEY (ledger_id) REFERENCES LEDGERS(id) ON DELETE CASCADE
             );`,
+            values: []
+        },
+        {
+            statement: "CREATE INDEX IF NOT EXISTS index_transaction_ledger_id ON TRANSACTIONS (ledger_id);",
+            values: []
+        },
+        {
+            statement: "CREATE INDEX IF NOT EXISTS index_transaction_create_time ON TRANSACTIONS (create_time);",
             values: []
         }
     ]);

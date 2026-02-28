@@ -8,6 +8,7 @@ import { Capacitor } from '@capacitor/core';
 import LedgerCreate from './pages/LedgerCreate/LedgerCreate';
 import LedgerView from './pages/LedgerView/LedgerView';
 import TransactionCreate from './pages/TransactionCreate/TransactionCreate';
+import TransactionView from './pages/TransactionView/TransactionView';
 
 // get jeep loader
 if (Capacitor.getPlatform() === 'web') {
@@ -23,6 +24,7 @@ createRoot(document.getElementById('root')!).render(
             <Route path='/transactioncreate/:ledgerId' element={<TransactionCreate />} />
 
             <Route path='/ledgerview/:ledgerId' element={<LedgerView />} />
+            <Route path='/transactionview/:transactionId' element={<TransactionView />} />
         </Routes>
     </BrowserRouter>
 );
