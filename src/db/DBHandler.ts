@@ -12,7 +12,7 @@ async function prepareDB(db: SQLiteDBConnection) {
             statement:
             `CREATE TABLE IF NOT EXISTS LEDGERS (
                 id INTEGER PRIMARY KEY NOT NULL,
-                name VARCHAR(50) NOT NULL,
+                name VARCHAR(50) NOT NULL CHECK (LENGTH(TRIM(name)) > 0),
                 img INTEGER
             );`,
             values: []
@@ -22,9 +22,9 @@ async function prepareDB(db: SQLiteDBConnection) {
             `CREATE TABLE IF NOT EXISTS TRANSACTIONS (
                 id INTEGER PRIMARY KEY NOT NULL,
                 ledger_id INTEGER NOT NULL,
-                name VARCHAR(20) NOT NULL,
+                name VARCHAR(20) NOT NULL CHECK (LENGTH(TRIM(name)) > 0),
                 details VARCHAR(256),
-                amount DECIMAL(13, 4) NOT NULL,
+                amount DECIMAL(13, 4) NOT NULL CHECK (amount > 0),
                 create_time INTEGER NOT NULL DEFAULT (strftime('%s', 'now') * 1000),
                 transaction_time INTEGER,
                 FOREIGN KEY (ledger_id) REFERENCES LEDGERS(id) ON DELETE CASCADE

@@ -4,24 +4,7 @@ import LedgerFunctions from "../../db/LedgerFunctions";
 import type { LedgerEntryDetails } from "../../db/TableDefinitions";
 import TransactionFunctions from "../../db/TransactionFunctions";
 import style from "./TransactionCreate.module.css";
-
-function validateFields(name: string, amt: string) {
-    if (!name && name.length == 0) {
-        alert("Error name is required");
-        return false;
-    }
-
-    if (!amt && amt.length == 0) {
-        alert("Error amount is required");
-        return false;
-    }
-    if (!(/^(?:-)?[0-9]{1,13}(?:\.[0-9]{1,4})?$/.test(amt))) {
-        alert("Error amount must be a number, optionally with '.' for a paise and (1,13) character before '.' and (1,4) character after '.'");
-        return false;
-    }
-
-    return true;
-}
+import TransactionUtils from "../../clientUtils/TransactionUtils";
 
 export default function TransactionCreate() {
     const { ledgerId } = useParams();
@@ -61,7 +44,7 @@ export default function TransactionCreate() {
         const details = (detailsRef.current as HTMLTextAreaElement).value;
         const trnTime = (trnTimeRef.current as HTMLInputElement).value;
 
-        if (!validateFields(name, amt)) {
+        if (!TransactionUtils.validateTransactionFields(name, amt)) {
             return;
         }
 

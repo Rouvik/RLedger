@@ -23,7 +23,7 @@ export async function getLedger(ledgerId: number) {
             throw error;
         }
 
-        throw new LedgerFunctionError("Failed to query for ledger " + error);
+        throw new LedgerFunctionError("Failed to query for ledger\n" + error);
     }
 }
 
@@ -43,7 +43,27 @@ export async function getLedgerViewList() {
             throw error;
         }
 
-        throw new LedgerFunctionError("Failed to query for ledger views " + error);
+        throw new LedgerFunctionError("Failed to query for ledger views\n" + error);
+    }
+}
+
+export async function getLedgerById(ledgerId: number) {
+    const db = await DBHandler.getDB();
+
+    try {
+        const ret = await db.query("SELECT id, name FROM LEDGERS WHERE id = ?;", [ledgerId]);
+        if (ret.values && ret.values.length > 0) {
+            return ret.values[0] as LedgerEntryDetails;
+        }
+        else {
+            throw new LedgerFunctionError("Failed to get ledger view");
+        }
+    } catch (error) {
+        if (error instanceof LedgerFunctionError) {
+            throw error;
+        }
+
+        throw new LedgerFunctionError("Failed to query for ledger view\n" + error);
     }
 }
 
@@ -52,7 +72,7 @@ export async function getLedgerCount() {
 
     try {
         const ret = await db.query("SELECT COUNT(*) FROM LEDGERS;");
-        if (ret.values && ret.values.length > 0) {            
+        if (ret.values && ret.values.length > 0) {
             return ret.values[0]["COUNT(*)"] as number;
         }
         else {
@@ -63,7 +83,7 @@ export async function getLedgerCount() {
             throw error;
         }
 
-        throw new LedgerFunctionError("Failed to query for ledger count " + error);
+        throw new LedgerFunctionError("Failed to query for ledger count\n" + error);
     }
 }
 
@@ -88,7 +108,7 @@ export async function getLedgerCountAndSum() {
             throw error;
         }
 
-        throw new LedgerFunctionError("Failed to query for ledger count " + error);
+        throw new LedgerFunctionError("Failed to query for ledger count\n" + error);
     }
 }
 
@@ -99,14 +119,45 @@ export async function deleteLedgerById(ledgerId: number) {
     try {
         await db.run("DELETE FROM LEDGERS WHERE id = ?", [ledgerId]);
     } catch (error) {
-        throw new LedgerFunctionError("Failed to delete ledger " + error);
+        throw new LedgerFunctionError("Failed to delete ledger\n" + error);
+    }
+}
+
+export async function updateLedger(ledgerValues: LedgerEntryDetails) {
+    const db = await DBHandler.getDB();
+
+    try {
+        await db.run(
+            `UPDATE LEDGERS
+            SET name = ?, img = ?
+            WHERE id = ?;`,
+            [
+                ledgerValues.name,
+                ledgerValues.img,
+                ledgerValues.id
+            ]
+        );
+    } catch (error) {
+        throw new LedgerFunctionError("Failed to update ledger entry, please check the inputs and try again\n" + error);
+    }
+}
+
+export async function addLedger(ledgerValues: Omit<LedgerEntryDetails, "id">) {
+    const db = await DBHandler.getDB();
+    try {
+        await db.run("INSERT INTO LEDGERS (NAME) VALUES (TRIM(?))", [ledgerValues.name]);
+    } catch (error) {
+        throw new LedgerFunctionError("Failed to add ledger\n" + error);
     }
 }
 
 export default {
     getLedger,
     getLedgerViewList,
+    getLedgerById,
     getLedgerCount,
     getLedgerCountAndSum,
-    deleteLedgerById
+    deleteLedgerById,
+    updateLedger,
+    addLedger
 };

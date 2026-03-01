@@ -1,16 +1,8 @@
 import { useRef } from 'react';
-import DBHandler from '../../db/DBHandler';
-import style from './LedgerCreate.module.css';
 import { Link, useNavigate } from 'react-router-dom';
-
-function validateFields(name: string) {
-    if (!name || name.length == 0) {
-        alert("Error name fields is required");
-        return false;
-    }
-
-    return true;
-}
+import LedgerUtils from '../../clientUtils/LedgerUtils';
+import LedgerFunctions from '../../db/LedgerFunctions';
+import style from './LedgerCreate.module.css';
 
 export default function LedgerCreate() {
     const labelNameRef = useRef<HTMLInputElement>(null);
@@ -22,15 +14,14 @@ export default function LedgerCreate() {
         }
 
         const name = labelNameRef.current.value;
-        if (!validateFields(name)) {
+        if (!LedgerUtils.validateLedgerFields(name)) {
             return;
         }
 
-        const db = await DBHandler.getDB();
         try {
-            await db.run("INSERT INTO LEDGERS (NAME) VALUES (?)", [name]);
+            await LedgerFunctions.addLedger({ name });
         } catch (error) {
-            alert("Error failed to insert into DB please try again...");
+            alert(error);
             return;
         }
 

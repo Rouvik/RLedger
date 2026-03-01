@@ -1,0 +1,31 @@
+.header {
+    margin: 15px;
+}
+
+.header input {
+    padding: 5px;
+    border: 0px;
+    border-radius: 2px;
+    outline: none;
+
+    width: 50%;
+    font-size: 2rem;
+    background-color: rgb(54, 54, 54);
+    color: white;
+}
+
+.header button {
+    width: 5em;
+    height: 2rem;
+    border: 0px;
+    border-radius: 5px;
+    margin: 15px;
+
+    font-size: 0.5em;
+    background-color: rgb(34, 255, 144);
+    transition: 200ms;
+}
+
+.header button:hover {
+    background-color: rgb(174, 255, 44);
+}

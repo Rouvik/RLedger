@@ -23,7 +23,7 @@ export async function getTransactionViewList() {
             throw error;
         }
 
-        throw new TransactionFunctionError("Failed to query for transaction views " + error);
+        throw new TransactionFunctionError("Failed to query for transaction views\n" + error);
     }
 }
 
@@ -43,7 +43,7 @@ export async function getTransactionViewListFilterByLedgerOrderByCreation(ledger
             throw error;
         }
 
-        throw new TransactionFunctionError("Failed to query for transaction views " + error);
+        throw new TransactionFunctionError("Failed to query for transaction views\n" + error);
     }
 }
 
@@ -63,7 +63,7 @@ export async function getTransactionViewListFilterByLedgerOrderByCreationPaged(l
             throw error;
         }
 
-        throw new TransactionFunctionError("Failed to query for transaction views " + error);
+        throw new TransactionFunctionError("Failed to query for transaction views\n" + error);
     }
 }
 
@@ -83,7 +83,7 @@ export async function getTransactionCountByLedger(ledgerId: number) {
             throw error;
         }
 
-        throw new TransactionFunctionError("Failed to query for transaction count " + error);
+        throw new TransactionFunctionError("Failed to query for transaction count\n" + error);
     }
 }
 
@@ -98,7 +98,7 @@ export async function addTransactionToLedger(ledgerId: number, transactionValues
     const db = await DBHandler.getDB();
 
     try {
-        await db.run("INSERT INTO TRANSACTIONS (ledger_id, name, details, amount, transaction_time) VALUES (?, ?, ?, ?, ?)", 
+        await db.run("INSERT INTO TRANSACTIONS (ledger_id, name, details, amount, transaction_time) VALUES (?, TRIM(?), TRIM(?), ?, ?)",
             [
                 ledgerId,
                 transactionValues.name,
@@ -108,7 +108,7 @@ export async function addTransactionToLedger(ledgerId: number, transactionValues
             ]
         );
     } catch (error) {
-        throw new TransactionFunctionError("Failed to insert transaction info check your values and please try again " + error);
+        throw new TransactionFunctionError("Failed to insert transaction info check your values and please try again\n" + error);
     }
 }
 
@@ -128,7 +128,7 @@ export async function getTransactionTotalByLedger(ledgerId: number) {
             throw error;
         }
 
-        throw new TransactionFunctionError("Failed to query for transaction count " + error);
+        throw new TransactionFunctionError("Failed to query for transaction count\n" + error);
     }
 }
 
@@ -153,7 +153,7 @@ export async function getTransactionSumAndTotalByLedger(ledgerId: number) {
             throw error;
         }
 
-        throw new TransactionFunctionError("Failed to query for transaction count " + error);
+        throw new TransactionFunctionError("Failed to query for transaction count\n" + error);
     }
 }
 
@@ -174,7 +174,37 @@ export async function getTransactionById(transactionId: number) {
             throw error;
         }
 
-        throw new TransactionFunctionError("Failed to query for transaction info" + error);
+        throw new TransactionFunctionError("Failed to query for transaction info\n" + error);
+    }
+}
+
+export async function updateTransaction(transactionValues: TransactionEntryDetails) {
+    const db = await DBHandler.getDB();
+
+    try {
+        await db.run(
+            `UPDATE TRANSACTIONS
+            SET name = ?, details = ?, amount = ?, transaction_time = ?
+            WHERE id = ?;`,
+            [
+                transactionValues.name,
+                transactionValues.details,
+                transactionValues.amount,
+                transactionValues.transaction_time,
+                transactionValues.id
+            ]);
+    } catch (error) {
+        throw new TransactionFunctionError("Failed to update transaction, please check if details are valid\n" + error);
+    }
+}
+
+export async function deleteTransaction(transactionId: number) {
+    const db = await DBHandler.getDB();
+
+    try {
+        await db.run("DELETE FROM TRANSACTIONS WHERE id = ?;", [transactionId]);
+    } catch (error) {
+        throw new TransactionFunctionError("Failed to delete transaction\n" + error);
     }
 }
 
@@ -186,5 +216,7 @@ export default {
     getTransactionCountByLedger,
     getTransactionTotalByLedger,
     getTransactionSumAndTotalByLedger,
-    getTransactionById
+    getTransactionById,
+    updateTransaction,
+    deleteTransaction
 };

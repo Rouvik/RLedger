@@ -20,7 +20,7 @@ export default function Totals({ totalVal = 0, numEntries = 0, transactionEntry 
                 Total {numEntries} {transactionEntry ? "transaction" : "ledger"} entries.
                 <div>
                     <button className={`${style.addBtn} ${style.btn}`} onClick={addBtnHandler}>Add</button>
-                    <button className={`${style.statBtn} ${style.btn}`}>Stats</button>
+                    <button className={`${style.statBtn} ${style.btn}`} onClick={() => alert("Unimplemented...")}>Stats</button>
                     {
                         transactionEntry ?
                             <button className={`${style.deleteBtn} ${style.btn}`} onClick={delBtnHandler}>Delete</button>
