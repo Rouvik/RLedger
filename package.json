@@ -13,7 +13,9 @@
   "dependencies": {
     "@capacitor-community/sqlite": "^8.0.0",
     "@capacitor/android": "^8.1.0",
+    "@capacitor/app": "^8.0.1",
     "@capacitor/core": "^8.1.0",
+    "@capacitor/toast": "^8.0.1",
     "@capawesome/capacitor-android-edge-to-edge-support": "^8.0.6",
     "jeep-sqlite": "^2.8.0",
     "node-addon-api": "^8.6.0",

@@ -8,10 +8,39 @@ import LedgerView from './pages/LedgerView/LedgerView';
 import TransactionCreate from './pages/TransactionCreate/TransactionCreate';
 import TransactionView from './pages/TransactionView/TransactionView';
 
+let lastBackPress = 0;
+
 // get jeep loader
 if (import.meta.env.VITE_PLATFORM === 'web') {
     const { defineCustomElements } = await import('jeep-sqlite/loader');
     defineCustomElements(window);
+}
+
+// android back button handler
+if (import.meta.env.VITE_PLATFORM === 'android') {
+    const CapacitorApp = await import('@capacitor/app');
+    const { Toast } = await import("@capacitor/toast");
+
+    CapacitorApp.App.addListener('backButton', () => {
+        if (window.location.pathname !== '/') {
+            window.history.back();
+        }
+        else {
+            const now = Date.now();
+            if (now - lastBackPress < 2000) {
+                CapacitorApp.App.exitApp();
+            }
+            else {
+                lastBackPress = now;
+                
+                Toast.show({
+                    text: "Press back button again to exit",
+                    duration: 'short',
+                    position: 'bottom'
+                });
+            }
+        }
+    });
 }
 
 createRoot(document.getElementById('root')!).render(
