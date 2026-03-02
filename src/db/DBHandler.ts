@@ -24,7 +24,7 @@ async function prepareDB(db: SQLiteDBConnection) {
                 ledger_id INTEGER NOT NULL,
                 name VARCHAR(20) NOT NULL CHECK (LENGTH(TRIM(name)) > 0),
                 details VARCHAR(256),
-                amount DECIMAL(13, 4) NOT NULL CHECK (amount > 0),
+                amount DECIMAL(13, 4) NOT NULL CHECK (amount != 0),
                 create_time INTEGER NOT NULL DEFAULT (strftime('%s', 'now') * 1000),
                 transaction_time INTEGER,
                 FOREIGN KEY (ledger_id) REFERENCES LEDGERS(id) ON DELETE CASCADE

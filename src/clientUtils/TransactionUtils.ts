@@ -4,7 +4,7 @@ export function validateTransactionFields(name: string, amt: string) {
         return false;
     }
 
-    if (!amt && amt.length == 0) {
+    if (!amt || amt.length == 0 || +amt == 0) {
         alert("Error amount is required");
         return false;
     }
