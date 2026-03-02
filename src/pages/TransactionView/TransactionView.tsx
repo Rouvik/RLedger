@@ -40,6 +40,7 @@ export default function TransactionView() {
                 }
 
                 const trnInfo = await TransactionFunctions.getTransactionById(+transactionId);
+                console.log(trnInfo);
                 setTransactionInfo(trnInfo);
                 setOriginalTransactionInfo(trnInfo);
             }

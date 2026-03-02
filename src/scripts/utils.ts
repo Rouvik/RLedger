@@ -1,9 +1,13 @@
-export function toDatetimeLocal(unix: number) {
-  const date = new Date(unix);
+export function toDatetimeLocal(datetime: number | null) {
+    if (datetime == null) {
+        return "";
+    }
 
-  const pad = (n: number) => n.toString().padStart(2, "0");
+    const date = new Date(datetime);
 
-  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+    const pad = (n: number) => n.toString().padStart(2, "0");
+
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
 }
 
 export default {
