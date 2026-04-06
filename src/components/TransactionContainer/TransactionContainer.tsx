@@ -29,7 +29,7 @@ export default function TransactionContainer({ ledgerId }: TransactionContainerP
     const [transactions, setTransactions] = useState<TransactionEntryDetailsView[]>([]);
     const [page, setPage] = useState<number>(0);
     const [hasMore, setHasMore] = useState<boolean>(true);
-    const [filterEnabled, setFilterEnabled] = useState<boolean>(Boolean(localStorage.getItem("filterEnabled")));
+    const [filterEnabled, setFilterEnabled] = useState<boolean>(localStorage.getItem("filterEnabled") === 'true');
     const [filterState, setFilterState] = useState<FilterState>(JSON.parse(localStorage.getItem("filterState") || "{}"));
     const [filterParams, setFilterParams] = useState<TransactionViewFilters>({});
     const navigator = useNavigate();
@@ -112,7 +112,7 @@ export default function TransactionContainer({ ledgerId }: TransactionContainerP
                 <button disabled={!hasMore} onClick={() => setPage(p => p + 1)}>&#xe941;</button>
             </div>
             <details className={style.filterContainer}>
-                <summary>Filters (<label htmlFor="filterCheckbox"><input type="checkbox" id="filterCheckbox" checked={filterEnabled} onClick={(evt) => setFilterEnabled((evt.target as HTMLInputElement).checked)} /> {filterEnabled ? "Enabled" : "Disabled"}</label>)</summary>
+                <summary>Filters (<label htmlFor="filterCheckbox"><input type="checkbox" id="filterCheckbox" checked={filterEnabled} onChange={(evt) => setFilterEnabled(evt.target.checked)} /> {filterEnabled ? "Enabled" : "Disabled"}</label>)</summary>
                 <div>
                     <label htmlFor="filterMinAmt">Min Amount:<input type="number" id="filterMinAmt" value={filterState.minAmount} onChange={(evt) => updateFilterState(evt, "minAmount")} /></label>
                     <label htmlFor="filterMaxAmt">Max Amount:<input type="number" id="filterMaxAmt" value={filterState.maxAmount} onChange={(evt) => updateFilterState(evt, "maxAmount")} /></label>
