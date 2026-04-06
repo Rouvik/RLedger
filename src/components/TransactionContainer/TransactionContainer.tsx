@@ -29,10 +29,14 @@ export default function TransactionContainer({ ledgerId }: TransactionContainerP
     const [transactions, setTransactions] = useState<TransactionEntryDetailsView[]>([]);
     const [page, setPage] = useState<number>(0);
     const [hasMore, setHasMore] = useState<boolean>(true);
-    const [filterEnabled, setFilterEnabled] = useState<boolean>(false);
-    const [filterState, setFilterState] = useState<FilterState>({});
+    const [filterEnabled, setFilterEnabled] = useState<boolean>(Boolean(localStorage.getItem("filterEnabled")));
+    const [filterState, setFilterState] = useState<FilterState>(JSON.parse(localStorage.getItem("filterState") || "{}"));
     const [filterParams, setFilterParams] = useState<TransactionViewFilters>({});
     const navigator = useNavigate();
+
+    useEffect(() => {
+        generateFilterParams(false);
+    }, []);
 
     useEffect(() => {
         setPage(0);
@@ -59,9 +63,8 @@ export default function TransactionContainer({ ledgerId }: TransactionContainerP
                     setTransactions(trans);
                 }
 
-                console.log("Trigger");
+                localStorage.setItem("filterEnabled", filterEnabled.toString());
             }
-            
         )();
     }, [ledgerId, page, filterEnabled, filterParams]);
 
@@ -74,9 +77,9 @@ export default function TransactionContainer({ ledgerId }: TransactionContainerP
         });
     }
 
-    function generateFilterParams() {
+    function generateFilterParams(updateLSFilterState: boolean) {
         const minAmount = filterState.minAmount ? +filterState.minAmount : undefined;
-        
+
         let maxAmount;
         if (filterState.maxAmount) {
             if (filterParams.minAmount && +filterState.maxAmount < filterParams.minAmount) {
@@ -95,6 +98,10 @@ export default function TransactionContainer({ ledgerId }: TransactionContainerP
         setFilterParams({
             minAmount, maxAmount, minCreationDate, maxCreationDate, minTransactionDate, maxTransactionDate
         });
+
+        if (updateLSFilterState) {
+            localStorage.setItem("filterState", JSON.stringify(filterState));
+        }
     }
 
     return (
@@ -105,27 +112,27 @@ export default function TransactionContainer({ ledgerId }: TransactionContainerP
                 <button disabled={!hasMore} onClick={() => setPage(p => p + 1)}>&#xe941;</button>
             </div>
             <details className={style.filterContainer}>
-                <summary>Filters (<label htmlFor="filterCheckbox"><input type="checkbox" id="filterCheckbox" onClick={(evt) => setFilterEnabled((evt.target as HTMLInputElement).checked)} /> {filterEnabled ? "Enabled" : "Disabled"}</label>)</summary>
+                <summary>Filters (<label htmlFor="filterCheckbox"><input type="checkbox" id="filterCheckbox" checked={filterEnabled} onClick={(evt) => setFilterEnabled((evt.target as HTMLInputElement).checked)} /> {filterEnabled ? "Enabled" : "Disabled"}</label>)</summary>
                 <div>
-                    <label htmlFor="filterMinAmt">Min Amount:<input type="number" id="filterMinAmt" onChange={(evt) => updateFilterState(evt, "minAmount")} /></label>
-                    <label htmlFor="filterMaxAmt">Max Amount:<input type="number" id="filterMaxAmt" onChange={(evt) => updateFilterState(evt, "maxAmount")} /></label>
+                    <label htmlFor="filterMinAmt">Min Amount:<input type="number" id="filterMinAmt" value={filterState.minAmount} onChange={(evt) => updateFilterState(evt, "minAmount")} /></label>
+                    <label htmlFor="filterMaxAmt">Max Amount:<input type="number" id="filterMaxAmt" value={filterState.maxAmount} onChange={(evt) => updateFilterState(evt, "maxAmount")} /></label>
                     <label htmlFor="filterMinCreationDate">Start Creation Date:
-                        <input type="date" id="filterMinCreationDate" onChange={(evt) => updateFilterState(evt, "minCreationDate")} />
-                        <input type="time" id="filterMinCreationTime" onChange={(evt) => updateFilterState(evt, "minCreationTime")} disabled={!filterState.minCreationDate} />
+                        <input type="date" id="filterMinCreationDate" value={filterState.minCreationDate} onChange={(evt) => updateFilterState(evt, "minCreationDate")} />
+                        <input type="time" id="filterMinCreationTime" value={filterState.minCreationTime} onChange={(evt) => updateFilterState(evt, "minCreationTime")} disabled={!filterState.minCreationDate} />
                     </label>
                     <label htmlFor="filterMaxCreationDate">End Creation Date:
-                        <input type="date" id="filterMaxCreationDate" onChange={(evt) => updateFilterState(evt, "maxCreationDate")} />
-                        <input type="time" id="filterMaxCreationTime" onChange={(evt) => updateFilterState(evt, "maxCreationTime")} disabled={!filterState.maxCreationDate} />
+                        <input type="date" id="filterMaxCreationDate" value={filterState.maxCreationDate} onChange={(evt) => updateFilterState(evt, "maxCreationDate")} />
+                        <input type="time" id="filterMaxCreationTime" value={filterState.maxCreationTime} onChange={(evt) => updateFilterState(evt, "maxCreationTime")} disabled={!filterState.maxCreationDate} />
                     </label>
                     <label htmlFor="filterMinTransactionDate">Start Transaction Date:
-                        <input type="date" id="filterMinTransactionDate" onChange={(evt) => updateFilterState(evt, "minTransactionDate")} />
-                        <input type="time" id="filterMinTransactionTime" onChange={(evt) => updateFilterState(evt, "minTransactionTime")} disabled={!filterState.minTransactionDate} />
+                        <input type="date" id="filterMinTransactionDate" value={filterState.minTransactionDate} onChange={(evt) => updateFilterState(evt, "minTransactionDate")} />
+                        <input type="time" id="filterMinTransactionTime" value={filterState.minTransactionTime} onChange={(evt) => updateFilterState(evt, "minTransactionTime")} disabled={!filterState.minTransactionDate} />
                     </label>
                     <label htmlFor="filterMaxTransactionDate">End Transaction Date:
-                        <input type="date" id="filterMaxTransactionDate" onChange={(evt) => updateFilterState(evt, "maxTransactionDate")} />
-                        <input type="time" id="filterMaxTransactionTime" onChange={(evt) => updateFilterState(evt, "maxTransactionTime")} disabled={!filterState.maxTransactionDate} />
+                        <input type="date" id="filterMaxTransactionDate" value={filterState.maxTransactionDate} onChange={(evt) => updateFilterState(evt, "maxTransactionDate")} />
+                        <input type="time" id="filterMaxTransactionTime" value={filterState.maxTransactionTime} onChange={(evt) => updateFilterState(evt, "maxTransactionTime")} disabled={!filterState.maxTransactionDate} />
                     </label>
-                    <button onClick={generateFilterParams}>Update Filter</button>
+                    <button onClick={() => generateFilterParams(true)}>Update Filter</button>
                 </div>
             </details>
             <div className={style.container}>
