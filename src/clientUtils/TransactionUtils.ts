@@ -1,3 +1,9 @@
+/**
+ * Checks fields name and amount of transaction for validity
+ * @param name The name field of transaction
+ * @param amt The amount field of transaction
+ * @returns true if all fields are valid else false
+ */
 export function validateTransactionFields(name: string, amt: string) {
     if (!name || (name.trim()).length == 0) {
         alert("Error name is required");

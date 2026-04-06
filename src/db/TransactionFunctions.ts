@@ -7,6 +7,10 @@ class TransactionFunctionError extends Error {
     }
 }
 
+/**
+ * Gets the entire listing of TransactionView[] for all ledgers
+ * @returns The minimal TransactionView entries for easy enumeration and printing for large requests
+ */
 export async function getTransactionViewList() {
     const db = await DBHandler.getDB();
     try {
@@ -27,6 +31,11 @@ export async function getTransactionViewList() {
     }
 }
 
+/**
+ * Gets the TrasactionView[] listing for a ledger ordered by creation_date
+ * @param ledgerId The ledger to fetch transactions from
+ * @returns TransactionsView[] listing
+ */
 export async function getTransactionViewListFilterByLedgerOrderByCreation(ledgerId: number) {
     const db = await DBHandler.getDB();
     try {
@@ -47,6 +56,13 @@ export async function getTransactionViewListFilterByLedgerOrderByCreation(ledger
     }
 }
 
+/**
+ * Gets the TrasactionView[] listing for a ledger ordered by creation_date with pagination
+ * @param ledgerId The ledger to fetch transactions from
+ * @param offset The offset to start reading from for pagination
+ * @param limit The number of rows to read
+ * @returns The TransactionView[] listing
+ */
 export async function getTransactionViewListFilterByLedgerOrderByCreationPaged(ledgerId: number, offset: number, limit: number) {
     const db = await DBHandler.getDB();
     try {
@@ -67,6 +83,9 @@ export async function getTransactionViewListFilterByLedgerOrderByCreationPaged(l
     }
 }
 
+/**
+ * TransactionFilters type to filter over, look at getTransactionViewListFilterByLedgerOrderByCreationPagedWithFilters(ledgerId: number, offset: number, limit: number, filters: TransactionViewFilters) for more info
+ */
 export type TransactionViewFilters = {
     minCreationDate?: number,
     maxCreationDate?: number,
@@ -76,6 +95,14 @@ export type TransactionViewFilters = {
     maxAmount?: number
 };
 
+/**
+ * Gets the TransactionView[] listing with pagination and complex filtering as described in TransactionViewFilters, all bounds inclusive
+ * @param ledgerId The ledger to get transactions from
+ * @param offset The offset to read rows from
+ * @param limit The number of rows to read
+ * @param filters The filtering to apply while reading, if it is {}, then it behaves similar to getTransactionViewListFilterByLedgerOrderByCreationPaged but with worser performance
+ * @returns The TransactionView[] listing
+ */
 export async function getTransactionViewListFilterByLedgerOrderByCreationPagedWithFilters(ledgerId: number, offset: number, limit: number, filters: TransactionViewFilters) {
     const db = await DBHandler.getDB();
     try {
@@ -129,7 +156,11 @@ export async function getTransactionViewListFilterByLedgerOrderByCreationPagedWi
     }
 }
 
-
+/**
+ * Gets the number of transactions in a ledger
+ * @param ledgerId The ledger to get transactions from
+ * @returns The number of transactions in a ledger
+ */
 export async function getTransactionCountByLedger(ledgerId: number) {
     const db = await DBHandler.getDB();
     try {
@@ -150,6 +181,9 @@ export async function getTransactionCountByLedger(ledgerId: number) {
     }
 }
 
+/**
+ * Type to store complete Transaction information and is consequently more verbose than TransactionView
+ */
 export type TransactionInfo = {
     name: string,
     details: string,
@@ -157,6 +191,11 @@ export type TransactionInfo = {
     transaction_time: number
 };
 
+/**
+ * Adds a transaction to a ledger specified by ledger id
+ * @param ledgerId The ledger to add transaction to
+ * @param transactionValues The Transaction information to store in DB
+ */
 export async function addTransactionToLedger(ledgerId: number, transactionValues: TransactionInfo) {
     const db = await DBHandler.getDB();
 
@@ -175,6 +214,11 @@ export async function addTransactionToLedger(ledgerId: number, transactionValues
     }
 }
 
+/**
+ * Gets the total amount in a ledger by summing all transaction amount entries in the ledger
+ * @param ledgerId The ledger to get total transaction amount from
+ * @returns The total amount of monetary value in a ledger, computed by adding all amount fields in transactions in the ledger
+ */
 export async function getTransactionTotalByLedger(ledgerId: number) {
     const db = await DBHandler.getDB();
     try {
@@ -195,11 +239,19 @@ export async function getTransactionTotalByLedger(ledgerId: number) {
     }
 }
 
+/**
+ * Dedicated type for getTransactionSumAndTotalByLedger(ledgerId: number) to get both the transaction count and sum
+ */
 export type TransactionCountAndSumTuple = {
     count: number,
     sum: number
 };
 
+/**
+ * Gets the count and sum for all transactions in a ledger, used as a optimised path for Totals view to prevent multiple calls to DB
+ * @param ledgerId The ledger to get count and sum from
+ * @returns The object containing count and sum of all transactions in the ledger
+ */
 export async function getTransactionSumAndTotalByLedger(ledgerId: number) {
     const db = await DBHandler.getDB();
     try {
@@ -220,6 +272,11 @@ export async function getTransactionSumAndTotalByLedger(ledgerId: number) {
     }
 }
 
+/**
+ * Gets the complete information for a transaction
+ * @param transactionId The id of transaction to fetch info for
+ * @returns The complete transaction details
+ */
 export async function getTransactionById(transactionId: number) {
     const db = await DBHandler.getDB();
 
@@ -241,6 +298,10 @@ export async function getTransactionById(transactionId: number) {
     }
 }
 
+/**
+ * Updates the transaction with id specified in transactionValues.id with other values in transactionValues (id is obviously not updated to anything)
+ * @param transactionValues The values to update in the transaction, note transaction id is used in this field to find the corresponding transaction, and must be valid pointing to correct transaction
+ */
 export async function updateTransaction(transactionValues: TransactionEntryDetails) {
     const db = await DBHandler.getDB();
 
@@ -261,6 +322,10 @@ export async function updateTransaction(transactionValues: TransactionEntryDetai
     }
 }
 
+/**
+ * Removes a transaction from the ledger
+ * @param transactionId The transaction to remove
+ */
 export async function deleteTransaction(transactionId: number) {
     const db = await DBHandler.getDB();
 

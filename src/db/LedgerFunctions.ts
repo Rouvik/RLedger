@@ -7,6 +7,11 @@ class LedgerFunctionError extends Error {
     }
 }
 
+/**
+ * Gets complete info of a ledger
+ * @param ledgerId The id of ledger to fetch
+ * @returns The LedgerEntryDetails containing complete info of ledger
+ */
 export async function getLedger(ledgerId: number) {
     const db = await DBHandler.getDB();
     try {
@@ -27,6 +32,10 @@ export async function getLedger(ledgerId: number) {
     }
 }
 
+/**
+ * Gets a minimised LedgerEntryDetailsView[] for enumeration
+ * @returns The LedgerEntryDetailsView[] containing basic ledger info
+ */
 export async function getLedgerViewList() {
     const db = await DBHandler.getDB();
 
@@ -47,6 +56,11 @@ export async function getLedgerViewList() {
     }
 }
 
+/**
+ * Gets the complete LedgerEntryDetails for a particular ledger
+ * @param ledgerId The id of ledger to get
+ * @returns The complete LedgerEntryDetails of requested ledger
+ */
 export async function getLedgerById(ledgerId: number) {
     const db = await DBHandler.getDB();
 
@@ -67,6 +81,10 @@ export async function getLedgerById(ledgerId: number) {
     }
 }
 
+/**
+ * Gets the number of ledgers in DB
+ * @returns The number of ledgers in DB
+ */
 export async function getLedgerCount() {
     const db = await DBHandler.getDB();
 
@@ -87,11 +105,18 @@ export async function getLedgerCount() {
     }
 }
 
+/**
+ * Dedicated type of count and sum for use in getLedgerCountAndSum()
+ */
 export type LedgerCountAndSumTuple = {
     count: number,
     sum: number
 };
 
+/**
+ * Gets the count of all ledgers, and sum of all transactions of all ledgers, ie. the net amount in account
+ * @returns The count of all ledgers and sum of all transactions of all ledgers
+ */
 export async function getLedgerCountAndSum() {
     const db = await DBHandler.getDB();
 
@@ -112,7 +137,10 @@ export async function getLedgerCountAndSum() {
     }
 }
 
-
+/**
+ * Deletes a ledger from DB by id
+ * @param ledgerId The id of ledger to remove
+ */
 export async function deleteLedgerById(ledgerId: number) {
     const db = await DBHandler.getDB();
 
@@ -123,6 +151,10 @@ export async function deleteLedgerById(ledgerId: number) {
     }
 }
 
+/**
+ * Updates a ledger entry in DB with id as ledgerValues.id, which must be valid
+ * @param ledgerValues The LedgerEntryDetails to update to a ledger, note: the id in ledgerValues is used to pick the ledger to update and must be valid
+ */
 export async function updateLedger(ledgerValues: LedgerEntryDetails) {
     const db = await DBHandler.getDB();
 
@@ -142,6 +174,10 @@ export async function updateLedger(ledgerValues: LedgerEntryDetails) {
     }
 }
 
+/**
+ * Adds a new ledger to DB
+ * @param ledgerValues The values of the new ledger to add, note: id is removed in this field and assigned by DB, as mentioned in type
+ */
 export async function addLedger(ledgerValues: Omit<LedgerEntryDetails, "id">) {
     const db = await DBHandler.getDB();
     try {
