@@ -10,6 +10,21 @@ export function toDatetimeLocal(datetime: number | null) {
     return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
 }
 
+export function getDateWithOptionalTime(date: string | undefined, time: string | undefined) {
+    if (date) {
+        if (time) {
+            return new Date(`${date}T${time}`).getTime();
+        }
+        else {
+            return new Date(date).getTime();
+        }
+    }
+    else {
+        return undefined;
+    }
+}
+
 export default {
-    toDatetimeLocal
+    toDatetimeLocal,
+    getDateWithOptionalTime
 };

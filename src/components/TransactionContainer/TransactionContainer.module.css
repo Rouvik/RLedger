@@ -9,7 +9,7 @@
     margin: 10px;
     padding: 10px;
     border-radius: 15px;
-    overflow-y: auto;
+    overflow: auto;
 
     background-color: rgb(36, 34, 55);
 }
@@ -40,4 +40,76 @@
 
 .pager button:disabled {
     background-color: rgb(107, 88, 124);
+}
+
+.filterContainer {
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+
+    background-color: rgb(36, 34, 55);
+}
+
+.filterContainer summary label {
+    transition: 200ms;
+}
+
+.filterContainer summary label:hover {
+    color: rgb(34, 255, 144);
+}
+
+.filterContainer div label {
+    display: flex;
+    flex-wrap: nowrap;
+    
+    font-size: large;
+    font-weight: bold;
+}
+
+.filterContainer div label>*:first-child {
+    margin-left: 10px;
+}
+
+.filterContainer div label>input {
+    padding: 5px;
+    border: 0px;
+    border-radius: 2px;
+    outline: none;
+
+    font-size: large;
+    background-color: rgb(54, 54, 54);
+    color: white;
+}
+
+.filterContainer div button {
+    height: 3em;
+    border: 0px;
+    border-radius: 5px;
+    margin: 5px;
+
+    background-color: rgb(34, 255, 144);
+    transition: 200ms;
+}
+
+.filterContainer div button:hover {
+    background-color: rgb(174, 255, 44);
+}
+
+
+.filterContainer div label>input:disabled {
+    background-color: rgb(70, 70, 70);
+    color: grey;
+}
+
+.filterContainer>div {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    overflow-x: auto;
+}
+
+.filterContainer>div>* {
+    margin: 5px;
 }

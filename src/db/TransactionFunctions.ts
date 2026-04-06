@@ -67,6 +67,69 @@ export async function getTransactionViewListFilterByLedgerOrderByCreationPaged(l
     }
 }
 
+export type TransactionViewFilters = {
+    minCreationDate?: number,
+    maxCreationDate?: number,
+    minTransactionDate?: number,
+    maxTransactionDate?: number,
+    minAmount?: number,
+    maxAmount?: number
+};
+
+export async function getTransactionViewListFilterByLedgerOrderByCreationPagedWithFilters(ledgerId: number, offset: number, limit: number, filters: TransactionViewFilters) {
+    const db = await DBHandler.getDB();
+    try {
+        const filterComponents = [];
+        const filterArguments = [];
+
+        if (filters.minAmount != undefined) {
+            filterComponents.push("amount >= ?");
+            filterArguments.push(filters.minAmount);
+        }
+
+        if (filters.maxAmount != undefined) {
+            filterComponents.push("amount <= ?");
+            filterArguments.push(filters.maxAmount);
+        }
+
+        if (filters.minCreationDate != undefined) {
+            filterComponents.push("create_time >= ?");
+            filterArguments.push(filters.minCreationDate);
+        }
+
+        if (filters.maxCreationDate != undefined) {
+            filterComponents.push("create_time <= ?");
+            filterArguments.push(filters.maxCreationDate);
+        }
+
+        if (filters.minTransactionDate != undefined) {
+            filterComponents.push("transaction_time >= ?");
+            filterArguments.push(filters.minTransactionDate);
+        }
+
+        if (filters.maxTransactionDate != undefined) {
+            filterComponents.push("transaction_time <= ?");
+            filterArguments.push(filters.maxTransactionDate);
+        }
+
+        const trasactionQuery = await db.query(`SELECT id, name, amount FROM TRANSACTIONS WHERE ledger_id = ? ${filterComponents.length ? " AND " + filterComponents.join(" AND ") : ""} ORDER BY create_time DESC LIMIT ? OFFSET ?;`, [ledgerId, ...filterArguments, limit, offset]);
+
+        if (trasactionQuery.values) {
+            return trasactionQuery.values as TransactionEntryDetailsView[];
+        }
+        else {
+            throw new TransactionFunctionError("Failed to get transactions view listing");
+        }
+    } catch (error) {
+        if (error instanceof TransactionFunctionError) {
+            throw error;
+        }
+
+        throw new TransactionFunctionError("Failed to query for transaction views\n" + error);
+    }
+}
+
+
 export async function getTransactionCountByLedger(ledgerId: number) {
     const db = await DBHandler.getDB();
     try {
@@ -87,7 +150,7 @@ export async function getTransactionCountByLedger(ledgerId: number) {
     }
 }
 
-type TransactionInfo = {
+export type TransactionInfo = {
     name: string,
     details: string,
     amount: number,
@@ -212,6 +275,7 @@ export default {
     getTransactionViewList,
     getTransactionViewListFilterByLedgerOrderByCreation,
     getTransactionViewListFilterByLedgerOrderByCreationPaged,
+    getTransactionViewListFilterByLedgerOrderByCreationPagedWithFilters,
     addTransactionToLedger,
     getTransactionCountByLedger,
     getTransactionTotalByLedger,
