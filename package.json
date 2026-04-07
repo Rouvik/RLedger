@@ -8,7 +8,8 @@
     "build:web": "tsc -b && vite build --mode web",
     "build:android": "tsc -b && vite build --mode android && rm -rf ./dist/assets/sql-wasm.wasm && npx cap sync && echo -e Run \\'npx cap run android\\' to preview",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "doc": "typedoc"
   },
   "dependencies": {
     "@capacitor-community/sqlite": "^8.0.0",
@@ -42,6 +43,7 @@
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
+    "typedoc": "^0.28.18",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.48.0",
     "vite": "^7.3.1"
