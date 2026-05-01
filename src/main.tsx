@@ -22,28 +22,43 @@ if (import.meta.env.VITE_PLATFORM === 'android') {
     const { Toast } = await import("@capacitor/toast");
     const { NativeBiometric } = await import("@capgo/capacitor-native-biometric");
 
-    try {
-        const biometryAvailable = NativeBiometric.isAvailable({ useFallback: true });
+    let needsAuth = true;
 
-        if (!biometryAvailable) {
-            alert("Error this app requires some native security or biometry enabled");
-            CapacitorApp.exitApp();
+    async function checkSecurity() {
+        if (!needsAuth) {
+            return;
         }
 
-        const verified = await NativeBiometric.verifyIdentity({
-            reason: "For secure access",
-            title: "Verify",
-            subtitle: "Verify to login",
-            description: "Please satisfy system security requirements to login"
-        }).then(() => true).catch(() => false);
+        try {
+            const biometryAvailable = NativeBiometric.isAvailable({ useFallback: true });
 
-        if (!verified) {
-            alert("Error verification failed");
-            CapacitorApp.exitApp();
+            if (!biometryAvailable) {
+                alert("Error this app requires some native security or biometry enabled");
+                CapacitorApp.exitApp();
+            }
+
+            const verified = await NativeBiometric.verifyIdentity({
+                reason: "For secure access",
+                title: "Verify",
+                subtitle: "Verify to login"
+            }).then(() => true).catch(() => false);
+
+            if (!verified) {
+                alert("Error verification failed");
+                CapacitorApp.exitApp();
+            }
+        } catch (error) {
+            alert(error);
         }
-    } catch (error) {
-        alert(error);
+        finally {
+            needsAuth = false;
+        }
     }
+
+    await checkSecurity();
+
+    CapacitorApp.addListener("resume", checkSecurity);
+    CapacitorApp.addListener("pause", () => needsAuth = true);
 
     CapacitorApp.addListener('backButton', () => {
         if (window.location.pathname !== '/') {
