@@ -21,6 +21,7 @@
     "@capacitor/toast": "^8.0.1",
     "@capawesome/capacitor-android-edge-to-edge-support": "^8.0.6",
     "@capawesome/capacitor-file-picker": "^8.0.2",
+    "@capgo/capacitor-native-biometric": "^8.4.2",
     "jeep-sqlite": "^2.8.0",
     "node-addon-api": "^8.6.0",
     "node-gyp": "^12.2.0",

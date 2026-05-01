@@ -16,23 +16,47 @@ if (import.meta.env.VITE_PLATFORM === 'web') {
     defineCustomElements(window);
 }
 
-// android back button handler
+// android authentication and back button handler
 if (import.meta.env.VITE_PLATFORM === 'android') {
-    const CapacitorApp = await import('@capacitor/app');
+    const { App: CapacitorApp } = await import('@capacitor/app');
     const { Toast } = await import("@capacitor/toast");
+    const { NativeBiometric } = await import("@capgo/capacitor-native-biometric");
 
-    CapacitorApp.App.addListener('backButton', () => {
+    try {
+        const biometryAvailable = NativeBiometric.isAvailable({ useFallback: true });
+
+        if (!biometryAvailable) {
+            alert("Error this app requires some native security or biometry enabled");
+            CapacitorApp.exitApp();
+        }
+
+        const verified = await NativeBiometric.verifyIdentity({
+            reason: "For secure access",
+            title: "Verify",
+            subtitle: "Verify to login",
+            description: "Please satisfy system security requirements to login"
+        }).then(() => true).catch(() => false);
+
+        if (!verified) {
+            alert("Error verification failed");
+            CapacitorApp.exitApp();
+        }
+    } catch (error) {
+        alert(error);
+    }
+
+    CapacitorApp.addListener('backButton', () => {
         if (window.location.pathname !== '/') {
             window.history.back();
         }
         else {
             const now = Date.now();
             if (now - lastBackPress < 2000) {
-                CapacitorApp.App.exitApp();
+                CapacitorApp.exitApp();
             }
             else {
                 lastBackPress = now;
-                
+
                 Toast.show({
                     text: "Press back button again to exit",
                     duration: 'short',

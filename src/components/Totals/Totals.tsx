@@ -16,7 +16,7 @@ export default function Totals({ totalVal = 0, numEntries = 0, transactionEntry 
     return (
         <div className={style.body}>
             <h1>{transactionEntry ? "Transactions" : "Ledgers"}</h1>
-            <h2>Total: &#8377;{totalVal}</h2>
+            <h2>Total: &#8377;{totalVal.toFixed(2)}</h2>
             <div className={style.statContainer}>
                 Total {numEntries} {transactionEntry ? "transaction" : "ledger"} entries.
                 <div>
