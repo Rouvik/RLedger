@@ -7,7 +7,7 @@
     "dev": "vite",
     "build:web": "tsc -b && vite build --mode web",
     "build:android": "tsc -b && vite build --mode android && rm -rf ./dist/assets/sql-wasm.wasm && npx cap sync && echo -e Run \\'npx cap run android\\' to preview",
-    "build:android-release": "tsc -b && vite build --mode android && rm -rf ./dist/assets/sql-wasm.wasm && npx cap sync && npx cap build android --keystorepath ../keystore/release-key.jks --keystorepass rouvik131109 --keystorealias release-key --keystorealiaspass rouvik131109 --androidreleasetype APK",
+    "build:android-release": "tsc -b && vite build --mode android && rm -rf ./dist/assets/sql-wasm.wasm && cd android && ./gradlew assembleRelease",
     "lint": "eslint .",
     "preview": "vite preview",
     "doc": "typedoc"
