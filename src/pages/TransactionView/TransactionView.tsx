@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import TransactionUtils from "../../clientUtils/TransactionUtils";
 import type { TransactionEntryDetails } from "../../db/TableDefinitions";
 import TransactionFunctions from "../../db/TransactionFunctions";
 import { toDatetimeLocal } from "../../scripts/utils";
 import style from "./TransactionView.module.css";
-import TransactionUtils from "../../clientUtils/TransactionUtils";
 
 export default function TransactionView() {
     const { transactionId } = useParams();
@@ -70,7 +70,7 @@ export default function TransactionView() {
         if (!TransactionUtils.validateTransactionFields(transactionInfo.name, transactionInfo.amount.toString())) {
             return;
         }
-        
+
         try {
             await TransactionFunctions.updateTransaction(transactionInfo);
             alert("Updated successfully!");

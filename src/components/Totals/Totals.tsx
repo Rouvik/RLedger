@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import style from "./Totals.module.css";
-import DBHandler from "../../db/DBHandler";
 
 type TotalsParams = {
     totalVal?: number,
@@ -26,13 +25,13 @@ export default function Totals({ totalVal = 0, numEntries = 0, transactionEntry 
                         transactionEntry ?
                             <button className={`${style.deleteBtn} ${style.btn}`} onClick={delBtnHandler}>Delete</button>
                             :
-                            <button className={`${style.backBtn} ${style.btn}`} onClick={DBHandler.exportDB}>Export</button>
+                            <></>
                     }
                     {
                         transactionEntry ?
                             <button className={`${style.backBtn} ${style.btn}`} onClick={() => navigator(-1)}>Back</button>
                             :
-                            <button className={`${style.deleteBtn} ${style.btn}`} onClick={DBHandler.importDB}>Import</button>
+                            <></>
                     }
                 </div>
             </div>

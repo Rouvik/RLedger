@@ -7,6 +7,7 @@ import LedgerCreate from './pages/LedgerCreate/LedgerCreate';
 import LedgerView from './pages/LedgerView/LedgerView';
 import TransactionCreate from './pages/TransactionCreate/TransactionCreate';
 import TransactionView from './pages/TransactionView/TransactionView';
+import Settings from './pages/Settings/Settings';
 
 let lastBackPress = 0;
 
@@ -20,45 +21,28 @@ if (import.meta.env.VITE_PLATFORM === 'web') {
 if (import.meta.env.VITE_PLATFORM === 'android') {
     const { App: CapacitorApp } = await import('@capacitor/app');
     const { Toast } = await import("@capacitor/toast");
-    const { NativeBiometric } = await import("@capgo/capacitor-native-biometric");
 
-    let needsAuth = true;
+    const Security = await import("./clientUtils/Security");
 
-    async function checkSecurity() {
-        if (!needsAuth) {
-            return;
-        }
-
-        try {
-            const biometryAvailable = NativeBiometric.isAvailable({ useFallback: true });
-
-            if (!biometryAvailable) {
-                alert("Error this app requires some native security or biometry enabled");
-                CapacitorApp.exitApp();
-            }
-
-            const verified = await NativeBiometric.verifyIdentity({
-                reason: "For secure access",
-                title: "Verify",
-                subtitle: "Verify to login"
-            }).then(() => true).catch(() => false);
-
-            if (!verified) {
-                alert("Error verification failed");
-                CapacitorApp.exitApp();
-            }
-        } catch (error) {
-            alert(error);
-        }
-        finally {
-            needsAuth = false;
-        }
+    try {
+        await Security.checkSecurityCond();
+    } catch (error) {
+        alert(error);
+        await CapacitorApp.exitApp();
     }
 
-    await checkSecurity();
+    CapacitorApp.addListener("resume", async () => {
+        try {
+            await Security.checkSecurityCond();
+        } catch (error) {
+            alert(error);
+            await CapacitorApp.exitApp();
+        }
+    });
 
-    CapacitorApp.addListener("resume", checkSecurity);
-    CapacitorApp.addListener("pause", () => needsAuth = true);
+    CapacitorApp.addListener("pause", () => {
+        Security.setNeedsAuth(true);
+    });
 
     CapacitorApp.addListener('backButton', () => {
         if (window.location.pathname !== '/') {
@@ -86,6 +70,8 @@ createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
         <Routes>
             <Route path='/' element={<App />} />
+
+            <Route path='/settings' element={<Settings />} />
 
             <Route path='/ledgercreate' element={<LedgerCreate />} />
             <Route path='/transactioncreate/:ledgerId' element={<TransactionCreate />} />

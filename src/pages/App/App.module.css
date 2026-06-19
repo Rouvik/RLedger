@@ -1,0 +1,14 @@
+.settingsBtn {
+    width: min-content;
+    margin: 15px 15px 0px 15px;
+    padding: 10px;
+    font-size: larger;
+    border: none;
+    border-radius: 5px;
+    background-color: rgb(185, 255, 73);
+    transition: 200ms;
+}
+
+.settingsBtn:hover {
+    background-color: rgb(255, 240, 73);
+}

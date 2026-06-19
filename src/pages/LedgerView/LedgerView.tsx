@@ -6,8 +6,8 @@ import LedgerFunctions from "../../db/LedgerFunctions";
 import type { LedgerEntryDetails, LedgerEntryDetailsView } from "../../db/TableDefinitions";
 import TransactionFunctions, { type TransactionCountAndSumTuple } from "../../db/TransactionFunctions";
 
-import style from "./LedgerView.module.css";
 import LedgerUtils from "../../clientUtils/LedgerUtils";
+import style from "./LedgerView.module.css";
 
 export default function LedgerView() {
     const { ledgerId } = useParams();

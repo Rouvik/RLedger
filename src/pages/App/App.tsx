@@ -1,9 +1,9 @@
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LedgerContainer from '../../components/LedgerContainer/LedgerContainer';
 import Totals from '../../components/Totals/Totals';
-import './App.module.css';
 import LedgerFunctions, { type LedgerCountAndSumTuple } from '../../db/LedgerFunctions';
-import { useEffect, useState } from 'react';
+import style from './App.module.css';
 
 export default function App() {
     const navigator = useNavigate();
@@ -23,6 +23,7 @@ export default function App() {
 
     return (
         <>
+            <button className={style.settingsBtn} onClick={() => navigator("/settings")}>Settings</button>
             <Totals
                 addBtnHandler={() => navigator("/ledgercreate")}
                 numEntries={ledgerViewInfo.count}
