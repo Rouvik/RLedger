@@ -26,3 +26,6 @@ dist-ssr
 
 # Docs (currently ignoring them)
 docs
+
+# Ignore keys
+keystore
