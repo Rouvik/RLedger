@@ -27,15 +27,15 @@ if (import.meta.env.VITE_PLATFORM === 'android') {
     try {
         await Security.checkSecurityCond();
     } catch (error) {
-        alert(error);
+        alert((error as Error).message);
         await CapacitorApp.exitApp();
     }
-
+    
     CapacitorApp.addListener("resume", async () => {
         try {
             await Security.checkSecurityCond();
         } catch (error) {
-            alert(error);
+            alert((error as Error).message);
             await CapacitorApp.exitApp();
         }
     });
